@@ -1,3 +1,19 @@
+:root {
+    --color-bg: #111;
+    --color-surface: #1c1c1e;
+    --color-surface-raised: #252528;
+    --color-border: #333;
+    --color-accent: #7c6af7;
+    --color-accent-hover: #9585fb;
+    --color-text: #e0e0e0;
+    --color-muted: #888;
+    --color-danger: #e05555;
+    --color-favorite: #f5a623;
+    --sidebar-w: 240px;
+    --statusbar-h: 24px;
+    --toolbar-h: 42px;
+}
+
 *,
 *::before,
 *::after {
@@ -15,8 +31,8 @@ body,
 }
 
 body {
-    background-color: #1a1a1a;
-    color: #f0f0f0;
+    background-color: var(--color-bg);
+    color: var(--color-text);
     font-family:
         system-ui,
         -apple-system,
@@ -24,13 +40,27 @@ body {
         "Segoe UI",
         Roboto,
         sans-serif;
+    font-size: 13px;
 }
 
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    gap: 1rem;
+button {
+    font: inherit;
+    cursor: pointer;
+    border: none;
+    background: none;
+    color: inherit;
+}
+
+input {
+    font: inherit;
+    color: inherit;
+    background: var(--color-surface-raised);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    padding: 0.25rem 0.5rem;
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--color-accent);
 }

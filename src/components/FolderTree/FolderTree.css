@@ -1,0 +1,96 @@
+/* ── Folder Tree sidebar ── */
+.folder-tree {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: var(--color-surface);
+    overflow-y: auto;
+    overflow-x: hidden;
+    user-select: none;
+}
+
+/* Root "open folder" button at the top */
+.folder-tree__open-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.45rem 0.6rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-accent);
+    border-bottom: 1px solid var(--color-border);
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: background 0.1s;
+}
+
+.folder-tree__open-btn:hover {
+    background: var(--color-surface-raised);
+}
+
+/* Empty state prompt */
+.folder-tree__empty {
+    padding: 1rem 0.75rem;
+    color: var(--color-muted);
+    font-size: 0.8rem;
+    line-height: 1.5;
+}
+
+/* Individual tree node row */
+.folder-tree__node {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding-top: 0.22rem;
+    padding-bottom: 0.22rem;
+    padding-right: 0.4rem;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.08s;
+}
+
+.folder-tree__node:hover {
+    background: var(--color-surface-raised);
+}
+
+.folder-tree__node--active {
+    background: color-mix(in srgb, var(--color-accent) 20%, transparent);
+}
+
+.folder-tree__node--active:hover {
+    background: color-mix(in srgb, var(--color-accent) 28%, transparent);
+}
+
+/* Chevron toggle — hidden for leaf nodes */
+.folder-tree__chevron {
+    display: inline-block;
+    width: 1rem;
+    text-align: center;
+    font-size: 0.65rem;
+    color: var(--color-muted);
+    flex-shrink: 0;
+    transition: color 0.1s;
+}
+
+.folder-tree__chevron:hover {
+    color: var(--color-text);
+}
+
+.folder-tree__chevron--hidden {
+    visibility: hidden;
+}
+
+/* Folder emoji icon */
+.folder-tree__icon {
+    flex-shrink: 0;
+    font-size: 0.85rem;
+}
+
+/* Folder display name */
+.folder-tree__label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.8rem;
+    color: var(--color-text);
+    flex: 1;
+}

@@ -1,0 +1,43 @@
+/* ── Breadcrumb navigation strip ── */
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.1rem;
+    padding: 0 0.5rem;
+    height: 100%;
+    overflow: hidden;
+}
+
+.breadcrumb__sep {
+    color: var(--color-muted);
+    font-size: 0.75rem;
+    padding: 0 0.1rem;
+    user-select: none;
+}
+
+.breadcrumb__segment {
+    font-size: 0.78rem;
+    color: var(--color-muted);
+    border-radius: 3px;
+    padding: 0.1rem 0.3rem;
+    white-space: nowrap;
+    transition:
+        color 0.1s,
+        background 0.1s;
+    max-width: 160px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.breadcrumb__segment:not(.breadcrumb__segment--active):hover {
+    color: var(--color-text);
+    background: var(--color-surface-raised);
+    cursor: pointer;
+}
+
+.breadcrumb__segment--active {
+    color: var(--color-text);
+    font-weight: 600;
+    cursor: default;
+}

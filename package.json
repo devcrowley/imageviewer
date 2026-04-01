@@ -10,11 +10,13 @@
         "tauri": "tauri"
     },
     "dependencies": {
+        "@panzoom/panzoom": "^4.6.1",
         "@tauri-apps/api": "^2",
         "@tauri-apps/plugin-dialog": "^2",
         "@tauri-apps/plugin-fs": "^2",
         "react": "^18",
-        "react-dom": "^18"
+        "react-dom": "^18",
+        "zustand": "^5.0.12"
     },
     "devDependencies": {
         "@tauri-apps/cli": "^2",

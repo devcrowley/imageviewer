@@ -1,0 +1,192 @@
+/* ── MediaGrid wrapper & toolbar ── */
+.media-grid__wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    background: var(--color-bg);
+}
+
+/* Toolbar strip */
+.media-grid__toolbar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.35rem 0.75rem;
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    flex-shrink: 0;
+    height: var(--toolbar-h);
+}
+
+.media-grid__search {
+    flex: 1;
+    max-width: 280px;
+}
+
+.media-grid__thumb-label {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--color-muted);
+    font-size: 0.78rem;
+    white-space: nowrap;
+}
+
+.media-grid__thumb-label input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    background: none;
+    border: none;
+    width: 90px;
+    cursor: pointer;
+    accent-color: var(--color-accent);
+}
+
+.media-grid__fav-btn {
+    padding: 0.25rem 0.65rem;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    font-size: 0.78rem;
+    color: var(--color-muted);
+    transition: all 0.1s;
+    white-space: nowrap;
+}
+
+.media-grid__fav-btn:hover {
+    border-color: var(--color-favorite);
+    color: var(--color-favorite);
+}
+
+.media-grid__fav-btn--active {
+    border-color: var(--color-favorite);
+    color: var(--color-favorite);
+    background: color-mix(in srgb, var(--color-favorite) 15%, transparent);
+}
+
+/* Loading state */
+.media-grid__loading {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-muted);
+    font-size: 0.9rem;
+}
+
+/* Scrollable grid area */
+.media-grid__grid {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0.75rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    gap: 0.5rem;
+}
+
+/* Empty-state label displayed inside the grid area */
+.media-grid__empty {
+    width: 100%;
+    padding-top: 3rem;
+    text-align: center;
+    color: var(--color-muted);
+    font-size: 0.85rem;
+}
+
+/* ── Media card ── */
+.media-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    width: var(--thumb-w, 180px);
+    border: 2px solid transparent;
+    border-radius: 6px;
+    padding: 0.3rem;
+    cursor: pointer;
+    transition:
+        border-color 0.1s,
+        background 0.1s;
+    background: transparent;
+}
+
+.media-card:hover {
+    background: var(--color-surface);
+    border-color: var(--color-border);
+}
+
+.media-card--selected {
+    border-color: var(--color-accent) !important;
+    background: color-mix(in srgb, var(--color-accent) 12%, transparent);
+}
+
+.media-card--favorite .media-card__name {
+    color: var(--color-favorite);
+}
+
+/* Folder card variant */
+.media-card--folder .media-card__thumb {
+    background: color-mix(in srgb, var(--color-accent) 10%, var(--color-surface));
+    font-size: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Thumb container — square, clips media */
+.media-card__thumb {
+    width: var(--thumb-w, 180px);
+    height: var(--thumb-w, 180px);
+    overflow: hidden;
+    border-radius: 4px;
+    background: var(--color-surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+/* The actual image or video element */
+.media-card__media {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Error / fallback icon */
+.media-card__thumb-error {
+    font-size: 2rem;
+    color: var(--color-muted);
+}
+
+/* Filename label */
+.media-card__name {
+    font-size: 0.72rem;
+    color: var(--color-text);
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: center;
+}
+
+/* Folder item count badge */
+.media-card__count {
+    font-size: 0.65rem;
+    color: var(--color-muted);
+}
+
+/* Favourite star badge in top-right corner */
+.media-card__fav-badge {
+    position: absolute;
+    top: 0.3rem;
+    right: 0.3rem;
+    font-size: 0.85rem;
+    color: var(--color-favorite);
+    text-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
+    line-height: 1;
+    pointer-events: none;
+}

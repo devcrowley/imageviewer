@@ -1,0 +1,189 @@
+/* ── Full-screen viewer overlay ── */
+.image-viewer {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.96);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    outline: none; /* focus ring suppression — tabIndex=-1 element */
+}
+
+/* ── Close button ── */
+.image-viewer__close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    z-index: 10;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+}
+
+.image-viewer__close:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+/* ── Prev / next arrows ── */
+.image-viewer__nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    width: 2.75rem;
+    height: 5rem;
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+    font-size: 2rem;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+    user-select: none;
+}
+
+.image-viewer__nav:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.image-viewer__nav--prev {
+    left: 0.5rem;
+}
+
+.image-viewer__nav--next {
+    right: 0.5rem;
+}
+
+/* ── ViewerCanvas ── */
+.viewer-canvas {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Rotation wrapper — panzoom works on the direct child, so we nest */
+.viewer-canvas__rotate {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    will-change: transform;
+}
+
+/* The img / video element — panzoom targets this */
+.viewer-canvas__media {
+    display: block;
+    max-width: 100vw;
+    max-height: 100vh;
+    object-fit: contain;
+    user-select: none;
+    -webkit-user-drag: none;
+    cursor: grab;
+}
+
+.viewer-canvas__media:active {
+    cursor: grabbing;
+}
+
+/* ── Info bar ── */
+.info-bar {
+    position: absolute;
+    bottom: 2rem; /* above hints strip */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.45rem 1rem;
+    background: rgba(0, 0, 0, 0.72);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    color: #e0e0e0;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    pointer-events: all;
+}
+
+.info-bar__index {
+    color: var(--color-muted);
+}
+
+.info-bar__name {
+    font-weight: 600;
+    max-width: 320px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.info-bar__dims {
+    color: var(--color-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.info-bar__mp {
+    font-size: 0.72rem;
+    color: var(--color-muted);
+}
+
+.info-bar__badge {
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+}
+
+.info-bar__badge--favonly {
+    background: color-mix(in srgb, var(--color-favorite) 20%, transparent);
+    color: var(--color-favorite);
+}
+
+.info-bar__fav-btn {
+    padding: 0.2rem 0.6rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    font-size: 0.78rem;
+    color: var(--color-muted);
+    transition: all 0.1s;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.info-bar__fav-btn:hover {
+    border-color: var(--color-favorite);
+    color: var(--color-favorite);
+}
+
+.info-bar__fav-btn--active {
+    border-color: var(--color-favorite);
+    color: var(--color-favorite);
+    background: color-mix(in srgb, var(--color-favorite) 12%, transparent);
+}
+
+/* ── Keyboard hints strip ── */
+.image-viewer__hints {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    padding: 0.25rem;
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.3);
+    letter-spacing: 0.02em;
+    pointer-events: none;
+    user-select: none;
+}
