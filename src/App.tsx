@@ -20,8 +20,15 @@ import { useAppStore } from "./store/appStore";
  *  4. Registers a Tauri file-drop listener to handle drag-to-open
  */
 function App() {
-    const { setRootPath, openViewer, getVisibleFiles, loadAppConfig, appConfig, optionsOpen, toggleOptions } =
-        useAppStore();
+    const {
+        setRootPath,
+        openViewer,
+        getVisibleFiles,
+        loadAppConfig,
+        appConfig,
+        optionsOpen,
+        toggleOptions,
+    } = useAppStore();
 
     useEffect(() => {
         /** Bootstrap: load config then pick the initial root folder */

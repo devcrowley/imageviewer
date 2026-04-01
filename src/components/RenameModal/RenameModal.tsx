@@ -58,10 +58,17 @@ const RenameModal: React.FC<Props> = ({ currentName, onConfirm, onCancel }) => {
                         spellCheck={false}
                     />
                     <div className="rename-modal__actions">
-                        <button type="button" onClick={onCancel} className="rename-modal__btn rename-modal__btn--cancel">
+                        <button
+                            type="button"
+                            onClick={onCancel}
+                            className="rename-modal__btn rename-modal__btn--cancel"
+                        >
                             Cancel
                         </button>
-                        <button type="submit" className="rename-modal__btn rename-modal__btn--confirm">
+                        <button
+                            type="submit"
+                            className="rename-modal__btn rename-modal__btn--confirm"
+                        >
                             Rename
                         </button>
                     </div>

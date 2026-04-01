@@ -113,9 +113,12 @@ const OptionsModal: React.FC = () => {
 
                         <label className="options-modal__slider-row">
                             <div className="options-modal__toggle-text">
-                                <span className="options-modal__toggle-label">Default thumbnail size</span>
+                                <span className="options-modal__toggle-label">
+                                    Default thumbnail size
+                                </span>
                                 <span className="options-modal__toggle-desc">
-                                    Starting thumbnail width when the app launches ({appConfig.defaultThumbSize}px).
+                                    Starting thumbnail width when the app launches (
+                                    {appConfig.defaultThumbSize}px).
                                 </span>
                             </div>
                             <input

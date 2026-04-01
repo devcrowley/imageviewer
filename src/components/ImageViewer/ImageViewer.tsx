@@ -89,9 +89,21 @@ const ImageViewer: React.FC = () => {
 
             // Prevent default browser scroll / zoom while viewing
             const handled = [
-                "ArrowRight", "ArrowLeft", "ArrowUp", "ArrowDown",
-                " ", "Escape", "KeyW", "KeyQ", "KeyE",
-                "KeyF", "KeyS", "KeyD", "Delete", "Digit1", "Digit2",
+                "ArrowRight",
+                "ArrowLeft",
+                "ArrowUp",
+                "ArrowDown",
+                " ",
+                "Escape",
+                "KeyW",
+                "KeyQ",
+                "KeyE",
+                "KeyF",
+                "KeyS",
+                "KeyD",
+                "Delete",
+                "Digit1",
+                "Digit2",
             ];
             if (handled.includes(e.code)) e.preventDefault();
 
@@ -162,8 +174,18 @@ const ImageViewer: React.FC = () => {
             }
         },
         [
-            viewerOpen, file, viewerNext, viewerPrev, closeViewer, toggleInfoBar,
-            toggleFavorite, toggleFavoritesOnly, shuffle, handleDelete, rotate, resetRotation,
+            viewerOpen,
+            file,
+            viewerNext,
+            viewerPrev,
+            closeViewer,
+            toggleInfoBar,
+            toggleFavorite,
+            toggleFavoritesOnly,
+            shuffle,
+            handleDelete,
+            rotate,
+            resetRotation,
         ],
     );
 
@@ -235,11 +257,11 @@ const ImageViewer: React.FC = () => {
 
             {/* Keyboard hint strip at the very bottom */}
             <div className="image-viewer__hints">
-                W/Q rotate · Shift+W/Q 90° · E reset · Space ★ · F favourites · S shuffle · Delete 🗑 · D info · Esc close
+                W/Q rotate · Shift+W/Q 90° · E reset · Space ★ · F favourites · S shuffle · Delete
+                🗑 · D info · Esc close
             </div>
         </div>
     );
 };
 
 export default ImageViewer;
-
