@@ -1,6 +1,6 @@
 # Image Viewer
 
-A fast, lightweight desktop image and video viewer built with **Tauri v2**, **React 18**, and **TypeScript**. Purpose-built as a modern replacement for a legacy NW.js viewer, with persistent per-image settings, favourites, and first-class Windows shell integration.
+A fast, lightweight desktop image and video viewer built with **Tauri v2**, **React 18**, and **TypeScript**. Purpose-built as a modern replacement for a legacy NW.js viewer, with persistent per-image settings, favorites, and first-class Windows shell integration.
 
 ---
 
@@ -23,15 +23,15 @@ A fast, lightweight desktop image and video viewer built with **Tauri v2**, **Re
 - Browsable folder tree (sidebar) with recursive media file counts
 - Thumbnail grid with adjustable size slider
 - Text filter to search files by name
-- Favourites-only toggle to show starred images
+- Favorites-only toggle to show starred images
 - Folder navigation via double-click or the breadcrumb trail
 - Status bar showing folder/file counts and active filters
 
 ### Full-screen Viewer
 - Pan and zoom with mouse wheel and drag (`1` — zoom 100%, `2` — zoom to fit)
 - Per-image rotation saved persistently (`W` / `Q` — 5°, `Shift+W` / `Shift+Q` — 90°, `E` — reset)
-- Toggle favourite (`Space`)
-- Toggle favourites-only filter without leaving the viewer (`F`)
+- Toggle favorite (`Space`)
+- Toggle favorites-only filter without leaving the viewer (`F`)
 - Jump to a random image (`S` — shuffle)
 - Permanently delete the current file (`Delete`, with optional confirmation dialog)
 - Image info bar overlay (`D`) showing filename, index, and path
@@ -48,8 +48,8 @@ A fast, lightweight desktop image and video viewer built with **Tauri v2**, **Re
 | `Q`                 | Rotate -5°              |
 | `Shift+Q`           | Rotate -90°             |
 | `E`                 | Reset rotation          |
-| `Space`             | Toggle favourite        |
-| `F`                 | Toggle favourites-only  |
+| `Space`             | Toggle favorite         |
+| `F`                 | Toggle favorites-only   |
 | `S`                 | Shuffle (random image)  |
 | `D`                 | Toggle info bar         |
 | `Delete`            | Permanently delete file |
@@ -65,7 +65,7 @@ A fast, lightweight desktop image and video viewer built with **Tauri v2**, **Re
 - **Delete** — permanently deletes the file (optional confirmation)
 
 ### Persistent Settings
-Per-image rotation, zoom/pan transform, and favourite state are saved to `_viewer.cfg` in each browsed folder. Settings survive app restarts and are keyed by filename.
+Per-image rotation, zoom/pan transform, and favorite state are saved to `_viewer.cfg` in each browsed folder. Settings survive app restarts and are keyed by filename.
 
 ### Application Options (⚙ gear button)
 All options are persisted to `%APPDATA%\imageviewer\config.json`.
