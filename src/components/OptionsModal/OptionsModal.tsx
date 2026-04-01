@@ -169,9 +169,7 @@ const OptionsModal: React.FC = () => {
                         <h3 className="options-modal__section-title">Windows Integration</h3>
                         <div className="options-modal__action-row">
                             <div className="options-modal__toggle-text">
-                                <span className="options-modal__toggle-label">
-                                    Context menu
-                                </span>
+                                <span className="options-modal__toggle-label">Context menu</span>
                                 <span className="options-modal__toggle-desc">
                                     Add "Open in Imageviewer" to the Windows right-click menu for
                                     images, videos, and folders. No admin rights required.
@@ -183,10 +181,7 @@ const OptionsModal: React.FC = () => {
                                 )}
                             </div>
                             <div className="options-modal__btn-group">
-                                <button
-                                    className="options-modal__btn"
-                                    onClick={handleRegister}
-                                >
+                                <button className="options-modal__btn" onClick={handleRegister}>
                                     Register
                                 </button>
                                 <button

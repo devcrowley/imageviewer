@@ -47,8 +47,7 @@ function App() {
                 await setRootPath(parent);
                 // Wait for the gallery to populate before opening the viewer
                 setTimeout(() => {
-                    const { getVisibleFiles: getFiles, openViewer: open } =
-                        useAppStore.getState();
+                    const { getVisibleFiles: getFiles, openViewer: open } = useAppStore.getState();
                     const files = getFiles();
                     const idx = files.findIndex((f) => f.path === path);
                     if (idx >= 0) open(idx);
