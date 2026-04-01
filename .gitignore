@@ -1,3 +1,14 @@
+# Legacy code base
+legacy/
+.specstory/
+
+# Tauri / Rust
+src-tauri/target/
+src-tauri/gen/
+
+# Vite build output
+dist/
+
 # Logs
 logs
 *.log

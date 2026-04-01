@@ -1,0 +1,11 @@
+# VS 2022 on this machine is missing the standard desktop C++ libs (lib\x64) and headers.
+# VS 2019 Community has the complete toolchain, so we redirect compilation and linking here.
+# To remove this workaround: run Visual Studio Installer, modify VS 2022, and add
+# "MSVC v143 - VS 2022 C++ x64/x86 build tools" under "Desktop development with C++".
+
+[target.x86_64-pc-windows-msvc]
+linker = "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\bin\\HostX64\\x64\\link.exe"
+
+[env]
+INCLUDE = "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\include;C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.22621.0\\ucrt;C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.22621.0\\shared;C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.22621.0\\um;C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.22621.0\\winrt"
+LIB = "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\lib\\x64;C:\\Program Files (x86)\\Windows Kits\\10\\Lib\\10.0.22621.0\\ucrt\\x64;C:\\Program Files (x86)\\Windows Kits\\10\\Lib\\10.0.22621.0\\um\\x64"
