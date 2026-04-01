@@ -31,10 +31,43 @@ function App() {
     } = useAppStore();
 
     useEffect(() => {
+        /**
+         * Navigate to a file or folder path.
+         * If the path is a directory, sets it as the root.
+         * If it's a file, navigates to its parent folder then opens the viewer.
+         */
+        const openAtPath = async (path: string) => {
+            try {
+                await invoke("list_directory", { path });
+                // It's a directory — set as root
+                setRootPath(path);
+            } catch {
+                // It's a file — navigate to its parent, then open in viewer
+                const parent = path.replace(/[\\/][^\\/]+$/, "") || path;
+                await setRootPath(parent);
+                // Wait for the gallery to populate before opening the viewer
+                setTimeout(() => {
+                    const { getVisibleFiles: getFiles, openViewer: open } =
+                        useAppStore.getState();
+                    const files = getFiles();
+                    const idx = files.findIndex((f) => f.path === path);
+                    if (idx >= 0) open(idx);
+                }, 300);
+            }
+        };
+
         /** Bootstrap: load config then pick the initial root folder */
         const bootstrap = async () => {
             // Always load app config first so all settings are available
             await loadAppConfig();
+
+            // Check for a path passed via CLI (Windows context menu / file association).
+            // This is stored on the Rust side during setup and consumed once here.
+            const startupPath = await invoke<string | null>("get_startup_path");
+            if (startupPath) {
+                await openAtPath(startupPath);
+                return;
+            }
 
             // Re-read appConfig after loading (store is updated synchronously)
             const { appConfig: cfg } = useAppStore.getState();
@@ -57,6 +90,19 @@ function App() {
         };
 
         bootstrap();
+
+        // ── Single-instance: path forwarded from a second launch ──────────────
+        // When the app is already running and the user opens a file via the
+        // Windows context menu, the Rust single-instance plugin kills the second
+        // process and emits "open-path" here instead.
+        let unlistenOpenPath: (() => void) | null = null;
+        getCurrentWindow()
+            .listen<string>("open-path", async (event) => {
+                await openAtPath(event.payload);
+            })
+            .then((fn) => {
+                unlistenOpenPath = fn;
+            });
 
         // ── Drag-to-open support ──────────────────────────────────────────────
         // Tauri emits 'tauri://file-drop' on the window when files / folders
@@ -92,21 +138,25 @@ function App() {
                 unlisten = fn;
             });
 
-        // ── Alt+Enter: toggle fullscreen ──────────────────────────────────────
+        // ── Alt+Enter / F11: toggle fullscreen ───────────────────────────────
+        // Handled via a Rust command so it bypasses Tauri's JS window permission
+        // system, which doesn't include fullscreen in its default capability set.
+        // We use capture:true so this fires before any child component handlers.
         const handleFullscreenToggle = async (e: KeyboardEvent) => {
-            if (e.altKey && e.code === "Enter") {
+            const isAltEnter = e.altKey && e.code === "Enter";
+            const isF11 = e.code === "F11";
+            if (isAltEnter || isF11) {
                 e.preventDefault();
-                const win = getCurrentWindow();
-                const isFullscreen = await win.isFullscreen();
-                await win.setFullscreen(!isFullscreen);
+                await invoke("toggle_fullscreen");
             }
         };
 
-        window.addEventListener("keydown", handleFullscreenToggle);
+        window.addEventListener("keydown", handleFullscreenToggle, true);
 
         return () => {
             unlisten?.();
-            window.removeEventListener("keydown", handleFullscreenToggle);
+            unlistenOpenPath?.();
+            window.removeEventListener("keydown", handleFullscreenToggle, true);
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

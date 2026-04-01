@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { invoke } from "@tauri-apps/api/core";
 import { useAppStore } from "../../store/appStore";
 import type { AppConfig } from "../../types";
 import "./OptionsModal.css";
@@ -9,6 +10,35 @@ import "./OptionsModal.css";
  */
 const OptionsModal: React.FC = () => {
     const { appConfig, saveAppConfig, toggleOptions } = useAppStore();
+
+    /** Status feedback for context menu registration actions */
+    const [ctxMenuStatus, setCtxMenuStatus] = useState<string>("");
+
+    /** Flashes a status message for 3 seconds */
+    const flashStatus = (msg: string) => {
+        setCtxMenuStatus(msg);
+        setTimeout(() => setCtxMenuStatus(""), 3000);
+    };
+
+    /** Writes HKCU registry entries for all supported file types + folders */
+    const handleRegister = async () => {
+        try {
+            await invoke("register_context_menu");
+            flashStatus("Registered ✓");
+        } catch (e) {
+            flashStatus(`Error: ${e}`);
+        }
+    };
+
+    /** Removes HKCU registry entries */
+    const handleUnregister = async () => {
+        try {
+            await invoke("unregister_context_menu");
+            flashStatus("Removed ✓");
+        } catch (e) {
+            flashStatus(`Error: ${e}`);
+        }
+    };
 
     /** Helper to render a labelled toggle row */
     const Toggle = ({
@@ -132,6 +162,41 @@ const OptionsModal: React.FC = () => {
                                 aria-label="Default thumbnail size"
                             />
                         </label>
+                    </section>
+
+                    {/* ── Windows Integration ── */}
+                    <section className="options-modal__section">
+                        <h3 className="options-modal__section-title">Windows Integration</h3>
+                        <div className="options-modal__action-row">
+                            <div className="options-modal__toggle-text">
+                                <span className="options-modal__toggle-label">
+                                    Context menu
+                                </span>
+                                <span className="options-modal__toggle-desc">
+                                    Add "Open in Imageviewer" to the Windows right-click menu for
+                                    images, videos, and folders. No admin rights required.
+                                </span>
+                                {ctxMenuStatus && (
+                                    <span className="options-modal__action-status">
+                                        {ctxMenuStatus}
+                                    </span>
+                                )}
+                            </div>
+                            <div className="options-modal__btn-group">
+                                <button
+                                    className="options-modal__btn"
+                                    onClick={handleRegister}
+                                >
+                                    Register
+                                </button>
+                                <button
+                                    className="options-modal__btn options-modal__btn--danger"
+                                    onClick={handleUnregister}
+                                >
+                                    Remove
+                                </button>
+                            </div>
+                        </div>
                     </section>
                 </div>
             </div>

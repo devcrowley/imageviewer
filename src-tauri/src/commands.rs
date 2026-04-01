@@ -302,3 +302,134 @@ pub fn build_tree(dir: &Path, depth: u32, max_depth: u32) -> Vec<TreeNode> {
         fs::write(config_dir.join("config.json"), config_json.as_bytes())
             .map_err(|e| e.to_string())
     }
+
+// ── CLI / single-instance path handling ──────────────────────────────────────
+
+use std::sync::Mutex;
+
+/// Managed application state holding the file/folder path passed as a CLI argument.
+/// Stored once during the setup hook and consumed (cleared) on the first frontend read.
+pub struct StartupPath(pub Mutex<Option<String>>);
+
+/// Returns and clears the path that was passed as a CLI argument on startup.
+/// The frontend calls this once after boot; subsequent calls return None.
+#[tauri::command]
+pub fn get_startup_path(state: tauri::State<'_, StartupPath>) -> Option<String> {
+    let mut guard = state.0.lock().unwrap();
+    guard.take()
+}
+
+/// Toggles the main window between fullscreen and windowed mode.
+/// Executed server-side so it bypasses the JS capability permission system.
+#[tauri::command]
+pub fn toggle_fullscreen(window: tauri::WebviewWindow) -> Result<(), String> {
+    let is_full = window.is_fullscreen().map_err(|e| e.to_string())?;
+    window.set_fullscreen(!is_full).map_err(|e| e.to_string())
+}
+
+// ── Windows context menu registration ────────────────────────────────────────
+
+/// Writes HKCU registry entries so "Open in Imageviewer" appears in the Windows
+/// right-click context menu for all supported image/video extensions and folders.
+/// Uses HKEY_CURRENT_USER so no admin rights are required.
+#[cfg(windows)]
+#[tauri::command]
+pub fn register_context_menu() -> Result<(), String> {
+    use winreg::enums::*;
+    use winreg::RegKey;
+
+    let exe_path = std::env::current_exe()
+        .map_err(|e| e.to_string())?
+        .to_string_lossy()
+        .to_string();
+
+    let hkcu = RegKey::predef(HKEY_CURRENT_USER);
+    let cmd_value = format!("\"{}\" \"%1\"", exe_path);
+    let icon_value = format!("{},0", exe_path);
+
+    // Supported media extensions (images + videos playable by the WebView)
+    let media_exts = [
+        "jpg", "jpeg", "png", "gif", "webp", "bmp", "tiff", "tif", "avif",
+        "mp4", "webm", "mov",
+    ];
+
+    for ext in &media_exts {
+        let shell_path = format!(
+            "Software\\Classes\\SystemFileAssociations\\.{}\\shell\\OpenInImageviewer",
+            ext
+        );
+        let (shell_key, _) = hkcu.create_subkey(&shell_path).map_err(|e| e.to_string())?;
+        shell_key
+            .set_value("", &"Open in Imageviewer")
+            .map_err(|e| e.to_string())?;
+        shell_key
+            .set_value("Icon", &icon_value)
+            .map_err(|e| e.to_string())?;
+        let (cmd_key, _) = shell_key.create_subkey("command").map_err(|e| e.to_string())?;
+        cmd_key
+            .set_value("", &cmd_value)
+            .map_err(|e| e.to_string())?;
+    }
+
+    // Folders
+    let (folder_key, _) = hkcu
+        .create_subkey("Software\\Classes\\Directory\\shell\\OpenInImageviewer")
+        .map_err(|e| e.to_string())?;
+    folder_key
+        .set_value("", &"Open folder in Imageviewer")
+        .map_err(|e| e.to_string())?;
+    folder_key
+        .set_value("Icon", &icon_value)
+        .map_err(|e| e.to_string())?;
+    let (folder_cmd_key, _) = folder_key
+        .create_subkey("command")
+        .map_err(|e| e.to_string())?;
+    folder_cmd_key
+        .set_value("", &cmd_value)
+        .map_err(|e| e.to_string())?;
+
+    Ok(())
+}
+
+/// Stub for non-Windows builds.
+#[cfg(not(windows))]
+#[tauri::command]
+pub fn register_context_menu() -> Result<(), String> {
+    Err("Context menu registration is only supported on Windows.".to_string())
+}
+
+/// Removes the "Open in Imageviewer" entries from the Windows registry.
+#[cfg(windows)]
+#[tauri::command]
+pub fn unregister_context_menu() -> Result<(), String> {
+    use winreg::enums::*;
+    use winreg::RegKey;
+
+    let hkcu = RegKey::predef(HKEY_CURRENT_USER);
+
+    let media_exts = [
+        "jpg", "jpeg", "png", "gif", "webp", "bmp", "tiff", "tif", "avif",
+        "mp4", "webm", "mov",
+    ];
+
+    for ext in &media_exts {
+        let key_path = format!(
+            "Software\\Classes\\SystemFileAssociations\\.{}\\shell\\OpenInImageviewer",
+            ext
+        );
+        // Ignore errors — key may not exist yet
+        let _ = hkcu.delete_subkey_all(&key_path);
+    }
+
+    let _ = hkcu
+        .delete_subkey_all("Software\\Classes\\Directory\\shell\\OpenInImageviewer");
+
+    Ok(())
+}
+
+/// Stub for non-Windows builds.
+#[cfg(not(windows))]
+#[tauri::command]
+pub fn unregister_context_menu() -> Result<(), String> {
+    Err("Context menu registration is only supported on Windows.".to_string())
+}
