@@ -6,14 +6,14 @@ A fast, lightweight desktop image and video viewer built with **Tauri v2**, **Re
 
 ## Stack
 
-| Layer | Technology |
-|---|---|
-| Desktop shell | Tauri v2 (Rust backend + WebView2 frontend) |
-| UI framework | React 18 + TypeScript 5 |
-| Build tool | Vite 5 |
-| State management | Zustand 5 |
-| Pan / zoom | @panzoom/panzoom 4.6.1 |
-| Package manager | Yarn 1.x |
+| Layer            | Technology                                  |
+| ---------------- | ------------------------------------------- |
+| Desktop shell    | Tauri v2 (Rust backend + WebView2 frontend) |
+| UI framework     | React 18 + TypeScript 5                     |
+| Build tool       | Vite 5                                      |
+| State management | Zustand 5                                   |
+| Pan / zoom       | @panzoom/panzoom 4.6.1                      |
+| Package manager  | Yarn 1.x                                    |
 
 ---
 
@@ -39,24 +39,24 @@ A fast, lightweight desktop image and video viewer built with **Tauri v2**, **Re
 
 ### Keyboard Shortcuts
 
-| Key | Action |
-|---|---|
-| `→` / `↓` | Next image |
-| `←` / `↑` | Previous image |
-| `W` | Rotate +5° |
-| `Shift+W` | Rotate +90° |
-| `Q` | Rotate -5° |
-| `Shift+Q` | Rotate -90° |
-| `E` | Reset rotation |
-| `Space` | Toggle favourite |
-| `F` | Toggle favourites-only |
-| `S` | Shuffle (random image) |
-| `D` | Toggle info bar |
-| `Delete` | Permanently delete file |
-| `1` | Zoom to 100% |
-| `2` | Zoom to fit |
-| `Esc` | Close viewer |
-| `F11` / `Alt+Enter` | Toggle fullscreen |
+| Key                 | Action                  |
+| ------------------- | ----------------------- |
+| `→` / `↓`           | Next image              |
+| `←` / `↑`           | Previous image          |
+| `W`                 | Rotate +5°              |
+| `Shift+W`           | Rotate +90°             |
+| `Q`                 | Rotate -5°              |
+| `Shift+Q`           | Rotate -90°             |
+| `E`                 | Reset rotation          |
+| `Space`             | Toggle favourite        |
+| `F`                 | Toggle favourites-only  |
+| `S`                 | Shuffle (random image)  |
+| `D`                 | Toggle info bar         |
+| `Delete`            | Permanently delete file |
+| `1`                 | Zoom to 100%            |
+| `2`                 | Zoom to fit             |
+| `Esc`               | Close viewer            |
+| `F11` / `Alt+Enter` | Toggle fullscreen       |
 
 ### File Operations (right-click context menu)
 - **Open** — open the file in the full-screen viewer
@@ -70,14 +70,14 @@ Per-image rotation, zoom/pan transform, and favourite state are saved to `_viewe
 ### Application Options (⚙ gear button)
 All options are persisted to `%APPDATA%\imageviewer\config.json`.
 
-| Option | Default |
-|---|---|
-| Confirm file deletion | On |
-| Start in last opened folder | On |
-| Always shuffle images | Off |
-| Loop slideshow | On |
-| Show video files | On |
-| Default thumbnail size | 180 px |
+| Option                      | Default |
+| --------------------------- | ------- |
+| Confirm file deletion       | On      |
+| Start in last opened folder | On      |
+| Always shuffle images       | Off     |
+| Loop slideshow              | On      |
+| Show video files            | On      |
+| Default thumbnail size      | 180 px  |
 
 ### Windows Shell Integration
 - Register an **"Open in Imageviewer"** entry in the Windows right-click context menu for all supported image/video extensions and folders — no admin rights required (writes to `HKCU`)
@@ -86,10 +86,10 @@ All options are persisted to `%APPDATA%\imageviewer\config.json`.
 - Supports receiving a file or folder path as a CLI argument (used by the context menu handler)
 
 ### Supported Formats
-| Type | Extensions |
-|---|---|
+| Type   | Extensions                                      |
+| ------ | ----------------------------------------------- |
 | Images | jpg, jpeg, png, gif, webp, bmp, tiff, tif, avif |
-| Video | mp4, webm, mov |
+| Video  | mp4, webm, mov                                  |
 
 ---
 
