@@ -2,6 +2,7 @@
 .status-bar {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 0.4rem;
     height: var(--statusbar-h);
     padding: 0 0.75rem;
@@ -11,6 +12,14 @@
     color: var(--color-muted);
     user-select: none;
     flex-shrink: 0;
+}
+
+/* Left-hand info cluster */
+.status-bar__info {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-width: 0;
 }
 
 .status-bar__sep {
@@ -32,4 +41,23 @@
 .status-bar__badge--fav {
     color: var(--color-favorite);
     background: color-mix(in srgb, var(--color-favorite) 12%, transparent);
+}
+
+/* ⚙ Options button (right side of status bar) */
+.status-bar__options-btn {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-muted);
+    font-size: 0.9rem;
+    line-height: 1;
+    padding: 0.2rem 0.4rem;
+    border-radius: var(--radius-sm, 4px);
+    transition: color 0.15s, background 0.15s;
+}
+
+.status-bar__options-btn:hover {
+    color: var(--color-text);
+    background: var(--color-surface-raised);
 }

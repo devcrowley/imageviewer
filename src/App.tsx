@@ -7,27 +7,37 @@ import Breadcrumb from "./components/Breadcrumb/Breadcrumb";
 import MediaGrid from "./components/MediaGrid/MediaGrid";
 import ImageViewer from "./components/ImageViewer/ImageViewer";
 import StatusBar from "./components/StatusBar/StatusBar";
+import OptionsModal from "./components/OptionsModal/OptionsModal";
 import { useAppStore } from "./store/appStore";
 
 /**
  * Root application component.
  *
  * On mount it:
- *  1. Loads the persisted last-folder from localStorage (if any)
- *  2. Falls back to the OS Pictures directory via the `get_pictures_folder` Rust command
- *  3. Registers a Tauri file-drop listener to handle drag-to-open
+ *  1. Loads the app config from disk (options / preferences)
+ *  2. Loads the persisted last-folder from localStorage if startInLastFolder is enabled
+ *  3. Falls back to the OS Pictures directory via the `get_pictures_folder` Rust command
+ *  4. Registers a Tauri file-drop listener to handle drag-to-open
  */
 function App() {
-    const { setRootPath, openViewer, getVisibleFiles } = useAppStore();
+    const { setRootPath, openViewer, getVisibleFiles, loadAppConfig, appConfig, optionsOpen, toggleOptions } =
+        useAppStore();
 
     useEffect(() => {
-        /** Bootstrap: pick the initial root folder */
+        /** Bootstrap: load config then pick the initial root folder */
         const bootstrap = async () => {
-            // Prefer the folder the user last had open
-            const remembered = localStorage.getItem("lastRootPath");
-            if (remembered) {
-                setRootPath(remembered);
-                return;
+            // Always load app config first so all settings are available
+            await loadAppConfig();
+
+            // Re-read appConfig after loading (store is updated synchronously)
+            const { appConfig: cfg } = useAppStore.getState();
+
+            if (cfg.startInLastFolder) {
+                const remembered = localStorage.getItem("lastRootPath");
+                if (remembered) {
+                    setRootPath(remembered);
+                    return;
+                }
             }
 
             // Fall back to OS Pictures folder
@@ -75,8 +85,21 @@ function App() {
                 unlisten = fn;
             });
 
+        // ── Alt+Enter: toggle fullscreen ──────────────────────────────────────
+        const handleFullscreenToggle = async (e: KeyboardEvent) => {
+            if (e.altKey && e.code === "Enter") {
+                e.preventDefault();
+                const win = getCurrentWindow();
+                const isFullscreen = await win.isFullscreen();
+                await win.setFullscreen(!isFullscreen);
+            }
+        };
+
+        window.addEventListener("keydown", handleFullscreenToggle);
+
         return () => {
             unlisten?.();
+            window.removeEventListener("keydown", handleFullscreenToggle);
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -84,8 +107,10 @@ function App() {
     // Persist the current root path whenever it changes
     const rootPath = useAppStore((s) => s.rootPath);
     useEffect(() => {
-        if (rootPath) localStorage.setItem("lastRootPath", rootPath);
-    }, [rootPath]);
+        if (rootPath && appConfig.startInLastFolder) {
+            localStorage.setItem("lastRootPath", rootPath);
+        }
+    }, [rootPath, appConfig.startInLastFolder]);
 
     return (
         <>
@@ -93,11 +118,14 @@ function App() {
                 sidebar={<FolderTree />}
                 breadcrumb={<Breadcrumb />}
                 content={<MediaGrid />}
-                statusBar={<StatusBar />}
+                statusBar={<StatusBar onOptionsClick={toggleOptions} />}
             />
 
             {/* Full-screen viewer rendered outside the layout so it can use position:fixed */}
             <ImageViewer />
+
+            {/* Options modal */}
+            {optionsOpen && <OptionsModal />}
         </>
     );
 }

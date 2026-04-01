@@ -10,6 +10,7 @@ interface Props {
     thumbSize: number;
     onClick: (index: number) => void;
     onDoubleClick: (index: number) => void;
+    onContextMenu: (index: number, e: React.MouseEvent) => void;
 }
 
 /**
@@ -25,6 +26,7 @@ const MediaCard: React.FC<Props> = ({
     thumbSize,
     onClick,
     onDoubleClick,
+    onContextMenu,
 }) => {
     const [errored, setErrored] = useState(false);
     const clickTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -69,6 +71,7 @@ const MediaCard: React.FC<Props> = ({
             className={classNames}
             onClick={handleClick}
             onDoubleClick={handleDoubleClick}
+            onContextMenu={(e) => onContextMenu(index, e)}
             title={file.name}
         >
             <div className="media-card__thumb" style={{ width: thumbSize, height: thumbSize }}>

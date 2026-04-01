@@ -1,6 +1,13 @@
 import { create } from "zustand";
 import { invoke } from "@tauri-apps/api/core";
-import type { FileEntry, FolderEntry, TreeNode, ImageSettings, ViewerConfig, AppConfig } from "../types";
+import type {
+    FileEntry,
+    FolderEntry,
+    TreeNode,
+    ImageSettings,
+    ViewerConfig,
+    AppConfig,
+} from "../types";
 import { defaultImageSettings, defaultAppConfig } from "../types";
 
 // ── Store state shape ─────────────────────────────────────────────────────────

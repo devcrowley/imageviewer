@@ -1,4 +1,5 @@
 import React, { useEffect, useCallback, useRef } from "react";
+import { ask } from "@tauri-apps/plugin-dialog";
 import { useAppStore } from "../../store/appStore";
 import ViewerCanvas from "./ViewerCanvas";
 import ImageInfoBar from "./ImageInfoBar";
@@ -16,7 +17,10 @@ import "./ImageViewer.css";
  *   Shift+Q                  — rotate -90°
  *   E                        — reset rotation to 0°
  *   Space                    — toggle favourite
+ *   F                        — toggle favourites-only filter
+ *   S                        — shuffle (random image)
  *   D                        — toggle info bar
+ *   Delete                   — permanently delete current file
  *   Escape                   — close viewer
  *   1                        — zoom to 100%
  *   2                        — zoom to fit (reset panzoom)
@@ -34,6 +38,10 @@ const ImageViewer: React.FC = () => {
         getImageSettings,
         updateImageSettings,
         toggleFavorite,
+        toggleFavoritesOnly,
+        shuffle,
+        deleteFile,
+        appConfig,
     } = useAppStore();
 
     const visibleFiles = getVisibleFiles();
@@ -56,6 +64,24 @@ const ImageViewer: React.FC = () => {
         updateImageSettings(file.name, { rotation: 0 });
     }, [file, updateImageSettings]);
 
+    /**
+     * Permanently deletes the currently viewed file.
+     * If confirmDeletion is enabled in app config, shows a native dialog first.
+     */
+    const handleDelete = useCallback(async () => {
+        if (!file) return;
+
+        if (appConfig.confirmDeletion) {
+            const confirmed = await ask(
+                `Permanently delete "${file.name}"?\n\nThis cannot be undone.`,
+                { title: "Delete File", kind: "warning" },
+            );
+            if (!confirmed) return;
+        }
+
+        await deleteFile(file.path, file.name);
+    }, [file, appConfig.confirmDeletion, deleteFile]);
+
     /** Global keyboard handler while viewer is open */
     const handleKeyDown = useCallback(
         (e: KeyboardEvent) => {
@@ -63,17 +89,9 @@ const ImageViewer: React.FC = () => {
 
             // Prevent default browser scroll / zoom while viewing
             const handled = [
-                "ArrowRight",
-                "ArrowLeft",
-                "ArrowUp",
-                "ArrowDown",
-                " ",
-                "Escape",
-                "KeyW",
-                "KeyQ",
-                "KeyE",
-                "Digit1",
-                "Digit2",
+                "ArrowRight", "ArrowLeft", "ArrowUp", "ArrowDown",
+                " ", "Escape", "KeyW", "KeyQ", "KeyE",
+                "KeyF", "KeyS", "KeyD", "Delete", "Digit1", "Digit2",
             ];
             if (handled.includes(e.code)) e.preventDefault();
 
@@ -97,6 +115,21 @@ const ImageViewer: React.FC = () => {
 
                 case "Space":
                     if (file) toggleFavorite(file.name);
+                    break;
+
+                // Toggle favourites-only filter
+                case "KeyF":
+                    toggleFavoritesOnly();
+                    break;
+
+                // Shuffle — pick a random image
+                case "KeyS":
+                    shuffle();
+                    break;
+
+                // Permanent delete (async — handled separately to support await)
+                case "Delete":
+                    handleDelete();
                     break;
 
                 // Rotation ── W: +5° / Shift+W: +90°
@@ -129,15 +162,8 @@ const ImageViewer: React.FC = () => {
             }
         },
         [
-            viewerOpen,
-            file,
-            viewerNext,
-            viewerPrev,
-            closeViewer,
-            toggleInfoBar,
-            toggleFavorite,
-            rotate,
-            resetRotation,
+            viewerOpen, file, viewerNext, viewerPrev, closeViewer, toggleInfoBar,
+            toggleFavorite, toggleFavoritesOnly, shuffle, handleDelete, rotate, resetRotation,
         ],
     );
 
@@ -209,10 +235,11 @@ const ImageViewer: React.FC = () => {
 
             {/* Keyboard hint strip at the very bottom */}
             <div className="image-viewer__hints">
-                W/Q rotate · Shift+W/Q 90° · E reset · Space ★ · D info · Esc close
+                W/Q rotate · Shift+W/Q 90° · E reset · Space ★ · F favourites · S shuffle · Delete 🗑 · D info · Esc close
             </div>
         </div>
     );
 };
 
 export default ImageViewer;
+

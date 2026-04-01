@@ -1,0 +1,160 @@
+.options-modal__backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 3000;
+    background: rgba(0, 0, 0, 0.65);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.options-modal {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    width: min(520px, 92vw);
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7);
+    overflow: hidden;
+}
+
+/* ── Header ── */
+.options-modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem 0.75rem;
+    border-bottom: 1px solid var(--color-border);
+    flex-shrink: 0;
+}
+
+.options-modal__title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.options-modal__close {
+    width: 1.8rem;
+    height: 1.8rem;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--color-muted);
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.1s;
+}
+
+.options-modal__close:hover {
+    background: rgba(255, 255, 255, 0.18);
+    color: var(--color-text);
+}
+
+/* ── Scrollable body ── */
+.options-modal__body {
+    overflow-y: auto;
+    padding: 0.5rem 0 0.75rem;
+    flex: 1;
+}
+
+/* ── Section ── */
+.options-modal__section {
+    padding: 0.65rem 1.25rem;
+}
+
+.options-modal__section + .options-modal__section {
+    border-top: 1px solid var(--color-border);
+}
+
+.options-modal__section-title {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-muted);
+    margin-bottom: 0.6rem;
+}
+
+/* ── Toggle row ── */
+.options-modal__toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.45rem 0;
+    cursor: pointer;
+}
+
+.options-modal__toggle-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    flex: 1;
+}
+
+.options-modal__toggle-label {
+    font-size: 0.85rem;
+    color: var(--color-text);
+}
+
+.options-modal__toggle-desc {
+    font-size: 0.75rem;
+    color: var(--color-muted);
+    line-height: 1.4;
+}
+
+/* The pill-shaped toggle button */
+.options-modal__toggle {
+    flex-shrink: 0;
+    width: 2.4rem;
+    height: 1.35rem;
+    border-radius: 999px;
+    background: var(--color-border);
+    position: relative;
+    transition: background 0.15s;
+    cursor: pointer;
+}
+
+.options-modal__toggle--on {
+    background: var(--color-accent);
+}
+
+.options-modal__toggle-thumb {
+    position: absolute;
+    top: 0.15rem;
+    left: 0.15rem;
+    width: 1.05rem;
+    height: 1.05rem;
+    border-radius: 50%;
+    background: #fff;
+    transition: transform 0.15s;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.options-modal__toggle--on .options-modal__toggle-thumb {
+    transform: translateX(1.05rem);
+}
+
+/* ── Slider row ── */
+.options-modal__slider-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.45rem 0;
+}
+
+.options-modal__slider {
+    flex-shrink: 0;
+    width: 110px;
+    accent-color: var(--color-accent);
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+    background: none;
+    border: none;
+}
